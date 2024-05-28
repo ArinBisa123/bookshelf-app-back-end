@@ -1,4 +1,4 @@
- const {addBookHandler, getAllBooksHandler, getBookByIDHandler, editBookByIDHandler, deleteBookByIDHandler, getBookByNameHandler } = require("./handler")
+const {addBookHandler, getAllBooksHandler, getBookByIDHandler, editBookByIDHandler, deleteBookByIDHandler, getBookByNameHandler, getBookByReadingStatus, getBookByReadingProgress } = require("./handler")
 const Joi = require("@hapi/joi")
 const routes=[
   {
@@ -18,7 +18,7 @@ const routes=[
   },
   {
     method:'GET',
-    path:'/books',
+    path:'/books/search',
     handler: getBookByNameHandler,
     options:{
       validate:{
@@ -27,7 +27,30 @@ const routes=[
         }),
       }
     }
-  
+  },
+  {
+    method:'GET',
+    path:'/books/progress',
+    handler: getBookByReadingProgress,
+    options:{
+      validate:{
+        query: Joi.object({
+          name: Joi.string().optional(),
+        }),
+      }
+    }
+  },
+  {
+    method:'GET',
+    path:'/books/status',
+    handler: getBookByReadingStatus,
+    options:{
+      validate:{
+        query: Joi.object({
+          name: Joi.string().optional(),
+        }),
+      }
+    }
   },
   {
     method: 'PUT',

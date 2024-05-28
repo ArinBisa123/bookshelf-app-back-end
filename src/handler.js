@@ -72,13 +72,46 @@ const getBookByIDHandler = (request,h)=>{
   response.code(404)
   return response
 }
+const getBookByReadingProgress=(request,h)=>{
+  const{reading}=request.query
+  const filterBook = books.filter(book=>book.finished===reading)
+  const detailBook = filterBook.map(({id,name,publisher})=>(({id,name,publisher})))
+  if (filterBook !== undefined) {
+    const response = h.response({
+      status:'success',
+      data:{
+        detailBook,
+      }
+    })
+    response.code(200)
+    return response
+  }
+}
+const getBookByReadingStatus=(request,h)=>{
+  const{finished}=request.query
+  const filterBook = books.filter(book=>book.finished===finished)
+  const detailBook = filterBook.map(({id,name,publisher})=>(({id,name,publisher})))
+  if (filterBook !== undefined) {
+    const response = h.response({
+      status:'success',
+      data:{
+        detailBook,
+      }
+    })
+    response.code(200)
+    return response
+  }
+}
 const getBookByNameHandler=(request,h)=>{
   const {name}=request.query
-  const findBook = books.find(book=>book.name.toLowerCase()===name.toLowerCase())
+  const booksMap = books.map(({id,name,publisher})=>({id,name,publisher}))
+  const findBook = booksMap.find(book=>book.name.toLowerCase()===name.toLowerCase())
   if(findBook){
     const response = h.response({
       status:'success',
-      data:{findBook}
+      data:{
+        findBook
+      },
     })
     response.code(200)
     return response
@@ -162,4 +195,4 @@ const deleteBookByIDHandler = (request,h)=>{
   return response
 }
 
-module.exports ={addBookHandler,getAllBooksHandler, getBookByIDHandler,editBookByIDHandler,deleteBookByIDHandler,getBookByNameHandler}
+module.exports ={addBookHandler,getAllBooksHandler, getBookByIDHandler,editBookByIDHandler,deleteBookByIDHandler,getBookByNameHandler,getBookByReadingProgress,getBookByReadingStatus}
